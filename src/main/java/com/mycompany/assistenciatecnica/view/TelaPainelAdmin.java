@@ -10,6 +10,7 @@ public class TelaPainelAdmin extends javax.swing.JFrame {
 
     private final ClienteDao clienteDao = new ClienteDao();
     private final OrdemServicoDao ordemServicoDao = new OrdemServicoDao();
+    private boolean modoClientes = true; 
 
     public TelaPainelAdmin() {
         initComponents();
@@ -24,6 +25,7 @@ public class TelaPainelAdmin extends javax.swing.JFrame {
         jButtonOrdens = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableAdmin = new javax.swing.JTable();
+        jButtonExcluir = new javax.swing.JButton();
         jButtonSair = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -61,9 +63,20 @@ public class TelaPainelAdmin extends javax.swing.JFrame {
         jTableAdmin.setRowHeight(28);
         jScrollPane1.setViewportView(jTableAdmin);
 
+        jButtonExcluir.setText("Excluir Selecionado");
+        jButtonExcluir.setFont(new java.awt.Font("Segoe UI", 1, 14));
+        jButtonExcluir.setBackground(new java.awt.Color(220, 80, 80));
+        jButtonExcluir.setForeground(java.awt.Color.WHITE);
+        jButtonExcluir.setFocusPainted(false);
+        jButtonExcluir.setContentAreaFilled(false);
+        jButtonExcluir.setOpaque(true);
+        jButtonExcluir.setBorderPainted(false);
+        jButtonExcluir.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButtonExcluir.addActionListener(evt -> jButtonExcluirActionPerformed(evt));
+
         jButtonSair.setText("Sair");
         jButtonSair.setFont(new java.awt.Font("Segoe UI", 1, 14));
-        jButtonSair.setBackground(new java.awt.Color(220, 80, 80));
+        jButtonSair.setBackground(new java.awt.Color(120, 120, 120));
         jButtonSair.setForeground(java.awt.Color.WHITE);
         jButtonSair.setFocusPainted(false);
         jButtonSair.setContentAreaFilled(false);
@@ -85,7 +98,10 @@ public class TelaPainelAdmin extends javax.swing.JFrame {
                         .addGap(12, 12, 12)
                         .addComponent(jButtonOrdens))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 640, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonSair))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jButtonExcluir)
+                        .addGap(12, 12, 12)
+                        .addComponent(jButtonSair)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -100,7 +116,9 @@ public class TelaPainelAdmin extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButtonSair, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonSair, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -118,6 +136,7 @@ public class TelaPainelAdmin extends javax.swing.JFrame {
     }
 
     private void mostrarClientes() {
+        modoClientes = true;
         List<Cliente> lista = clienteDao.listarTodos();
         DefaultTableModel model = new DefaultTableModel(
             new Object[][] {},
@@ -135,6 +154,7 @@ public class TelaPainelAdmin extends javax.swing.JFrame {
     }
 
     private void mostrarOrdens() {
+        modoClientes = false;
         List<Object[]> lista = ordemServicoDao.listarTodas();
         DefaultTableModel model = new DefaultTableModel(
             new Object[][] {},
@@ -149,7 +169,6 @@ public class TelaPainelAdmin extends javax.swing.JFrame {
             model.addRow(os);
         }
         jTableAdmin.setModel(model);
-        
         model.addTableModelListener(e -> {
             if (e.getType() == javax.swing.event.TableModelEvent.UPDATE) {
                 int row = e.getFirstRow();
@@ -176,6 +195,43 @@ public class TelaPainelAdmin extends javax.swing.JFrame {
 
     private void jButtonOrdensActionPerformed(java.awt.event.ActionEvent evt) {
         mostrarOrdens();
+    }
+
+    private void jButtonExcluirActionPerformed(java.awt.event.ActionEvent evt) {
+        int linha = jTableAdmin.getSelectedRow();
+        if (linha == -1) {
+            mostrarErro("Selecione um registro na tabela para excluir.");
+            return;
+        }
+
+        int id = ((Number) jTableAdmin.getValueAt(linha, 0)).intValue();
+        String descricaoTipo = modoClientes ? "cliente" : "ordem de serviço";
+
+        int opcao = javax.swing.JOptionPane.showConfirmDialog(this,
+                "Deseja realmente excluir o " + descricaoTipo + " de ID " + id + "?",
+                "Confirmar exclusão",
+                javax.swing.JOptionPane.YES_NO_OPTION,
+                javax.swing.JOptionPane.WARNING_MESSAGE);
+        if (opcao != javax.swing.JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        boolean ok = modoClientes ? clienteDao.excluir(id) : ordemServicoDao.excluir(id);
+
+        if (ok) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "Cliente de ID " + id + " excluído com sucesso."
+                    + (modoClientes ? "\nAs ordens de serviço e equipamentos deste cliente também foram removidos." : ""),
+                    "Excluído",
+                    javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            if (modoClientes) {
+                mostrarClientes();
+            } else {
+                mostrarOrdens();
+            }
+        } else {
+            mostrarErro("Não foi possível excluir o " + descricaoTipo + " de ID " + id + ".");
+        }
     }
 
     private void jButtonSairActionPerformed(java.awt.event.ActionEvent evt) {
@@ -214,6 +270,7 @@ public class TelaPainelAdmin extends javax.swing.JFrame {
 
     private javax.swing.JButton jButtonClientes;
     private javax.swing.JButton jButtonOrdens;
+    private javax.swing.JButton jButtonExcluir;
     private javax.swing.JButton jButtonSair;
     private javax.swing.JLabel jLabelTitulo;
     private javax.swing.JPanel jPanel1;

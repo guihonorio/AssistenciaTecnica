@@ -92,4 +92,15 @@ public class OrdemServicoDao {
         }
     }
 
+    public boolean excluir(int osId) {
+        String sql = "DELETE FROM ordem_servico WHERE id = ?";
+        try (PreparedStatement ps = Conexao.getConexao().prepareStatement(sql)) {
+            ps.setInt(1, osId);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("Erro ao excluir ordem de serviço: " + e.getMessage());
+            return false;
+        }
+    }
+
 }

@@ -21,28 +21,26 @@ public class TelaLogin extends javax.swing.JFrame {
         jPasswordFieldSenha = new javax.swing.JPasswordField();
         jButtonEntrar = new javax.swing.JButton();
         jButtonCadastrar = new javax.swing.JButton();
+        jSeparatorAdmin = new javax.swing.JSeparator();
         jButtonAdmin = new javax.swing.JButton();
-
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Login - Assistência Técnica");
-
         jPanel1.setBackground(new java.awt.Color(245, 247, 250));
 
         jLabelTitulo.setFont(new java.awt.Font("Segoe UI", 1, 26));
         jLabelTitulo.setForeground(new java.awt.Color(0, 102, 255));
         jLabelTitulo.setText("Login");
+        jLabelTitulo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
         jLabelEmail.setFont(new java.awt.Font("Segoe UI", 0, 14));
         jLabelEmail.setForeground(new java.awt.Color(60, 60, 60));
         jLabelEmail.setText("E-mail:");
-
         jLabelSenha.setFont(new java.awt.Font("Segoe UI", 0, 14));
         jLabelSenha.setForeground(new java.awt.Color(60, 60, 60));
         jLabelSenha.setText("Senha:");
 
         jTextFieldEmail.setFont(new java.awt.Font("Segoe UI", 0, 14));
         jTextFieldEmail.setBackground(java.awt.Color.WHITE);
-
         jPasswordFieldSenha.setFont(new java.awt.Font("Segoe UI", 0, 14));
         jPasswordFieldSenha.setBackground(java.awt.Color.WHITE);
 
@@ -68,66 +66,73 @@ public class TelaLogin extends javax.swing.JFrame {
         jButtonCadastrar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButtonCadastrar.addActionListener(evt -> jButtonCadastrarActionPerformed(evt));
 
+        jSeparatorAdmin.setForeground(new java.awt.Color(180, 185, 190));
+
         jButtonAdmin.setText("Entrar como Administrador");
-        jButtonAdmin.setFont(new java.awt.Font("Segoe UI", 0, 13));
+        jButtonAdmin.setFont(new java.awt.Font("Segoe UI", 0, 12));
         jButtonAdmin.setForeground(new java.awt.Color(0, 102, 255));
+        jButtonAdmin.setBackground(java.awt.Color.WHITE);
         jButtonAdmin.setFocusPainted(false);
         jButtonAdmin.setContentAreaFilled(false);
-        jButtonAdmin.setBorderPainted(false);
+        jButtonAdmin.setOpaque(true);
+        jButtonAdmin.setBorder(javax.swing.BorderFactory.createCompoundBorder(
+                javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 102, 255), 1),
+                javax.swing.BorderFactory.createEmptyBorder(7, 18, 7, 18)));
         jButtonAdmin.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButtonAdmin.setToolTipText("Acesso restrito à administração");
         jButtonAdmin.addActionListener(evt -> jButtonAdminActionPerformed(evt));
+    
+        jPanel1.setPreferredSize(new java.awt.Dimension(470, 540));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(39, 39, 39)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(147, 147, 147)
-                        .addComponent(jLabelTitulo))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jLabelTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                         .addComponent(jLabelEmail)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextFieldEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabelSenha)
-                        .addGap(18, 18, 18)
-                        .addComponent(jPasswordFieldSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(71, 71, 71)
-                        .addComponent(jButtonEntrar, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(147, 147, 147)
-                        .addComponent(jButtonCadastrar))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(147, 147, 147)
-                        .addComponent(jButtonAdmin)))
-                .addContainerGap(39, Short.MAX_VALUE))
+                        .addComponent(jLabelSenha))
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jTextFieldEmail, 280, 280, 280)
+                        .addComponent(jPasswordFieldSenha, 280, 280, 280)
+                        .addComponent(jButtonEntrar, 280, 280, 280)
+                        .addComponent(jButtonCadastrar, 280, 280, 280)
+                        .addComponent(jSeparatorAdmin, 280, 280, 280)
+                        .addComponent(jButtonAdmin, 280, 280, 280)))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
-        jPanel1Layout.setVerticalGroup(
+          jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addComponent(jLabelTitulo)
-                .addGap(30, 30, 30)
+                .addGap(0, 45, Short.MAX_VALUE)
+                .addComponent(jLabelTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(24, 24, 24)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabelEmail)
                     .addComponent(jTextFieldEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addGap(14, 14, 14)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabelSenha)
                     .addComponent(jPasswordFieldSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(30, 30, 30)
                 .addComponent(jButtonEntrar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(12, 12, 12)
-                .addComponent(jButtonCadastrar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(8, 8, 8)
-                .addComponent(jButtonAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(30, Short.MAX_VALUE))
+                .addGap(10, 10, 10)
+                .addComponent(jButtonCadastrar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(24, 24, 24)
+                .addComponent(jSeparatorAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, 2, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(14, 14, 14)
+                .addComponent(jButtonAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 45, Short.MAX_VALUE))
         );
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -201,6 +206,7 @@ public class TelaLogin extends javax.swing.JFrame {
     private javax.swing.JButton jButtonEntrar;
     private javax.swing.JButton jButtonCadastrar;
     private javax.swing.JButton jButtonAdmin;
+    private javax.swing.JSeparator jSeparatorAdmin;
     private javax.swing.JLabel jLabelTitulo;
     private javax.swing.JLabel jLabelEmail;
     private javax.swing.JLabel jLabelSenha;

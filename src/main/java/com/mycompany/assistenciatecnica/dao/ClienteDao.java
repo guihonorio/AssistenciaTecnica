@@ -74,4 +74,67 @@ public class ClienteDao {
         return lista;
     }
 
+    public boolean excluir(int clienteId) {
+        java.sql.Connection conn = Conexao.getConexao();
+        try {
+            conn.setAutoCommit(false);
+
+            try (PreparedStatement ps = conn.prepareStatement(
+                    "DELETE FROM ordem_servico WHERE cliente_id = ?")) {
+                ps.setInt(1, clienteId);
+                ps.executeUpdate();
+            }
+
+            try (PreparedStatement ps = conn.prepareStatement(
+                    "DELETE FROM ordem_servico WHERE equipamento_id IN "
+                    + "(SELECT id FROM equipamentos WHERE cliente_id = ?)")) {
+                ps.setInt(1, clienteId);
+                ps.executeUpdate();
+            }
+
+            try (PreparedStatement ps = conn.prepareStatement(
+                    "DELETE FROM equipamentos WHERE cliente_id = ?")) {
+                ps.setInt(1, clienteId);
+                ps.executeUpdate();
+            }
+
+            try (PreparedStatement ps = conn.prepareStatement(
+                    "DELETE FROM clientes WHERE id = ?")) {
+                ps.setInt(1, clienteId);
+                int removidos = ps.executeUpdate();
+                conn.commit();
+                return removidos > 0;
+            }
+        } catch (SQLException e) {
+            try {
+                conn.rollback();
+            } catch (SQLException ex) {
+                System.err.println("Erro no rollback: " + ex.getMessage());
+            }
+            System.err.println("Erro ao excluir cliente: " + e.getMessage());
+            return false;
+        } finally {
+            try {
+                conn.setAutoCommit(true);
+            } catch (SQLException ex) {
+                System.err.println("Erro ao restaurar auto-commit: " + ex.getMessage());
+            }
+        }
+    }
+
+    public boolean atualizar(Cliente c) {
+        String sql = "UPDATE clientes SET nome = ?, email = ?, telefone = ?, senha = ? WHERE id = ?";
+        try (PreparedStatement ps = Conexao.getConexao().prepareStatement(sql)) {
+            ps.setString(1, c.getNome());
+            ps.setString(2, c.getEmail());
+            ps.setString(3, c.getTelefone());
+            ps.setString(4, c.getSenha());
+            ps.setInt(5, c.getId());
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("Erro ao atualizar cliente: " + e.getMessage());
+            return false;
+        }
+    }
+
 }

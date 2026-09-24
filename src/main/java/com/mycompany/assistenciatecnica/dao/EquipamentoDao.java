@@ -28,4 +28,15 @@ public class EquipamentoDao {
         }
         return null;
     }
+
+    public void excluirPorCliente(int clienteId) {
+        String sql = "DELETE FROM equipamentos WHERE cliente_id = ?";
+        try (PreparedStatement ps = Conexao.getConexao().prepareStatement(sql)) {
+            ps.setInt(1, clienteId);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Erro ao excluir equipamentos do cliente: " + e.getMessage());
+        }
+    }
+
 }
