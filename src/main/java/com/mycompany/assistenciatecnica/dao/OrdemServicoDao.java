@@ -55,4 +55,41 @@ public class OrdemServicoDao {
         }
         return lista;
     }
+
+    public java.util.List<Object[]> listarTodas() {
+        java.util.List<Object[]> lista = new java.util.ArrayList<>();
+        String sql = "SELECT os.id, c.nome AS cliente, "
+                + "(e.tipo || ' ' || e.marca || ' ' || e.modelo) AS equipamento, "
+                + "os.status "
+                + "FROM ordem_servico os "
+                + "JOIN clientes c ON c.id = os.cliente_id "
+                + "JOIN equipamentos e ON e.id = os.equipamento_id "
+                + "ORDER BY os.id DESC";
+        try (PreparedStatement ps = Conexao.getConexao().prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                lista.add(new Object[]{
+                    rs.getInt("id"),
+                    rs.getString("cliente"),
+                    rs.getString("equipamento"),
+                    rs.getString("status")
+                });
+            }
+        } catch (SQLException e) {
+            System.err.println("Erro ao listar OS: " + e.getMessage());
+        }
+        return lista;
+    }
+
+    public boolean atualizarStatus(int osId, String status) {
+        String sql = "UPDATE ordem_servico SET status = ? WHERE id = ?";
+        try (PreparedStatement ps = Conexao.getConexao().prepareStatement(sql)) {
+            ps.setString(1, status);
+            ps.setInt(2, osId);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("Erro ao atualizar status: " + e.getMessage());
+            return false;
+        }
+    }
+
 }

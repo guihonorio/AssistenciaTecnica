@@ -56,4 +56,22 @@ public class ClienteDao {
         return null;
     }
 
+    public java.util.List<Cliente> listarTodos() {
+        java.util.List<Cliente> lista = new java.util.ArrayList<>();
+        String sql = "SELECT * FROM clientes ORDER BY nome";
+        try (PreparedStatement ps = Conexao.getConexao().prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                lista.add(new Cliente(
+                        rs.getInt("id"),
+                        rs.getString("nome"),
+                        rs.getString("email"),
+                        rs.getString("telefone"),
+                        rs.getString("senha")));
+            }
+        } catch (SQLException e) {
+            System.err.println("Erro ao listar clientes: " + e.getMessage());
+        }
+        return lista;
+    }
+
 }
