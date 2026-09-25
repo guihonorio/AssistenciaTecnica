@@ -7,8 +7,37 @@ import com.mycompany.assistenciatecnica.model.OrdemServico;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeAll;
 
 public class AssistenciaTecnicaTest {
+
+    @BeforeAll
+    public static void criarTabelasParaTeste() {
+        try (java.sql.Statement stmt = com.mycompany.assistenciatecnica.dao.Conexao.getConexao().createStatement()) {
+            stmt.execute("CREATE TABLE IF NOT EXISTS clientes ("
+                    + "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                    + "nome TEXT NOT NULL, "
+                    + "email TEXT NOT NULL UNIQUE, "
+                    + "telefone TEXT, "
+                    + "senha TEXT NOT NULL)");
+            stmt.execute("CREATE TABLE IF NOT EXISTS equipamentos ("
+                    + "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                    + "cliente_id INTEGER NOT NULL, "
+                    + "tipo TEXT NOT NULL, "
+                    + "marca TEXT NOT NULL, "
+                    + "modelo TEXT NOT NULL, "
+                    + "numero_serie TEXT)");
+            stmt.execute("CREATE TABLE IF NOT EXISTS ordem_servico ("
+                    + "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                    + "cliente_id INTEGER NOT NULL, "
+                    + "equipamento_id INTEGER NOT NULL, "
+                    + "data_solicitacao TEXT NOT NULL, "
+                    + "defeito TEXT NOT NULL, "
+                    + "status TEXT NOT NULL DEFAULT 'Aberta')");
+        } catch (java.sql.SQLException e) {
+            System.err.println("Erro ao criar tabelas de teste: " + e.getMessage());
+        }
+    }
 
     private final ClienteDao clienteDao = new ClienteDao();
 
